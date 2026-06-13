@@ -99,7 +99,6 @@ The goal of this project is to answer critical business questions such as:
 | Cloud Storage        | AWS S3        |
 | Data Warehouse       | Snowflake     |
 | Programming Language | Python        |
-| Data Manipulation    | Pandas, NumPy |
 | Query Language       | SQL           |
 | Visualization        | Tableau       |
 | Version Control      | GitHub        |
@@ -354,7 +353,8 @@ Provide executives with a complete overview of business performance.
 
 ### Screenshot
 
-![Executive Dashboard](images/tableau/dashboard_1.png)
+<img width="3198" height="1798" alt="Dashboard 1" src="https://github.com/user-attachments/assets/db567647-d38c-4929-95e3-75a02b85ca7b" />
+
 
 ---
 
@@ -375,7 +375,8 @@ Analyze product performance and operational efficiency.
 
 ### Screenshot
 
-![Products Dashboard](images/tableau/dashboard_2.png)
+<img width="3198" height="1798" alt="Dashboard 2" src="https://github.com/user-attachments/assets/b9fa6f52-4f9b-4318-b256-c3a3713819d2" />
+
 
 ---
 
@@ -396,26 +397,8 @@ Analyze customer behavior, loyalty, and geographical trends.
 
 ### Screenshot
 
-![Customer Dashboard](images/tableau/dashboard_3.png)
+<img width="2730" height="1534" alt="Dashboard 3" src="https://github.com/user-attachments/assets/877fbf11-c80d-4f2a-89ae-be404029bddf" />
 
----
-
-# Dashboard 4 — Geographic Analytics Dashboard
-
-### Objectives
-
-Visualize revenue and seller distribution across regions.
-
-### Visualizations
-
-* Revenue Map
-* Revenue by State
-* Seller Distribution by State
-* Regional Revenue Insights
-
-### Screenshot
-
-![Geographic Dashboard](images/tableau/dashboard_4.png)
 
 ---
 
@@ -424,12 +407,20 @@ Visualize revenue and seller distribution across regions.
 Amazon S3 was used as the cloud storage layer for raw datasets.
 
 ### AWS Screenshots
+<img width="2560" height="1600" alt="image" src="https://github.com/user-attachments/assets/8fa61ae1-9cea-496c-8dd6-78dfa0e15c9a" />
 
-![AWS Screenshot 1](images/aws/aws_1.png)
 
-![AWS Screenshot 2](images/aws/aws_2.png)
+<img width="2560" height="1600" alt="image" src="https://github.com/user-attachments/assets/9f05cebf-9794-4abf-a6a2-a27e275df5da" />
 
-![AWS Screenshot 3](images/aws/aws_3.png)
+
+<img width="2560" height="1600" alt="image" src="https://github.com/user-attachments/assets/cf35ba21-1308-4214-b4e3-3fe6c081aad2" />
+
+<img width="2560" height="1600" alt="image" src="https://github.com/user-attachments/assets/d383f889-684b-4c5d-a23a-eeffdcb03241" />
+
+<img width="2560" height="1600" alt="image" src="https://github.com/user-attachments/assets/198a0584-1bce-465a-9d28-fc38064ee296" />
+
+<img width="2560" height="1600" alt="image" src="https://github.com/user-attachments/assets/33224184-78f6-410e-bf1c-2ad3c46efe69" />
+
 
 ---
 
@@ -439,11 +430,14 @@ Snowflake served as the centralized analytics warehouse.
 
 ### Snowflake Screenshots
 
-![Snowflake Screenshot 1](images/snowflake/snowflake_1.png)
+<img width="2560" height="1600" alt="image" src="https://github.com/user-attachments/assets/f826f730-2139-4546-aef1-cd021fba3e7b" />
 
-![Snowflake Screenshot 2](images/snowflake/snowflake_2.png)
 
-![Snowflake Screenshot 3](images/snowflake/snowflake_3.png)
+<img width="2560" height="1600" alt="image" src="https://github.com/user-attachments/assets/f0cac66d-566e-445b-b414-98829090fc3d" />
+
+
+<img width="2560" height="1600" alt="image" src="https://github.com/user-attachments/assets/f1fe83f9-7b53-4e14-922f-46f1cb5e4f71" />
+
 
 ---
 
@@ -522,9 +516,9 @@ Snowflake served as the centralized analytics warehouse.
 
 ### Connect With Me
 
-* LinkedIn: [Your LinkedIn]
-* Tableau Public: [Your Tableau Public]
-* GitHub: [Your GitHub]
+* LinkedIn: https://www.linkedin.com/in/yash-malviya-03433b258/
+* Tableau Public: https://public.tableau.com/app/profile/yash.malviya6387/vizzes
+* GitHub: https://github.com/YashMalviya01
 
 ---
 
