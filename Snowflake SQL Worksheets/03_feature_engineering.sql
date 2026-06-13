@@ -1,0 +1,139 @@
+-- =========================================================
+-- FEATURE ENGINEERING - ORDERS
+-- =========================================================
+
+CREATE OR REPLACE TABLE OLIST_DW.MART.FE_ORDERS AS
+SELECT
+    *,
+
+    YEAR(ORDER_PURCHASE_TIMESTAMP) AS ORDER_YEAR,
+    MONTH(ORDER_PURCHASE_TIMESTAMP) AS ORDER_MONTH,
+    QUARTER(ORDER_PURCHASE_TIMESTAMP) AS ORDER_QUARTER,
+    DAYOFWEEK(ORDER_PURCHASE_TIMESTAMP) AS ORDER_WEEKDAY,
+
+    DATEDIFF(
+        'day',
+        ORDER_PURCHASE_TIMESTAMP,
+        ORDER_DELIVERED_CUSTOMER_DATE
+    ) AS DELIVERY_DAYS,
+
+    DATEDIFF(
+        'day',
+        ORDER_ESTIMATED_DELIVERY_DATE,
+        ORDER_DELIVERED_CUSTOMER_DATE
+    ) AS DELIVERY_DELAY_DAYS,
+
+    DATEDIFF(
+        'hour',
+        ORDER_PURCHASE_TIMESTAMP,
+        ORDER_APPROVED_AT
+    ) AS APPROVAL_HOURS,
+
+    CASE
+        WHEN ORDER_STATUS = 'delivered'
+             THEN 'Completed'
+        WHEN ORDER_STATUS IN ('canceled','unavailable')
+             THEN 'Failed'
+        ELSE 'In Progress'
+    END AS ORDER_STATUS_GROUP
+
+FROM OLIST_DW.MART.CLEAN_ORDERS;
+
+
+-- =========================================================
+-- FEATURE ENGINEERING - ORDER ITEMS
+-- =========================================================
+
+CREATE OR REPLACE TABLE OLIST_DW.MART.FE_ORDER_ITEMS AS
+SELECT
+    *,
+
+    PRICE + FREIGHT_VALUE AS TOTAL_ITEM_VALUE,
+
+    ROUND(
+        (FREIGHT_VALUE / NULLIF(PRICE,0))*100,
+        2
+    ) AS FREIGHT_PERCENTAGE
+
+FROM OLIST_DW.MART.CLEAN_ORDER_ITEMS;
+
+
+-- =========================================================
+-- FEATURE ENGINEERING - REVIEWS
+-- =========================================================
+
+CREATE OR REPLACE TABLE OLIST_DW.MART.FE_REVIEWS AS
+SELECT
+    *,
+
+    CASE
+        WHEN REVIEW_SCORE IN (1,2)
+            THEN 'Negative'
+        WHEN REVIEW_SCORE = 3
+            THEN 'Neutral'
+        WHEN REVIEW_SCORE IN (4,5)
+            THEN 'Positive'
+    END AS REVIEW_CATEGORY
+
+FROM OLIST_DW.MART.CLEAN_REVIEWS;
+
+
+-- =========================================================
+-- CUSTOMER METRICS
+-- =========================================================
+
+CREATE OR REPLACE TABLE OLIST_DW.MART.CUSTOMER_METRICS AS
+SELECT
+    c.CUSTOMER_UNIQUE_ID,
+
+    COUNT(DISTINCT o.ORDER_ID) AS TOTAL_ORDERS,
+
+    ROUND(
+        SUM(r.TOTAL_ORDER_VALUE),
+        2
+    ) AS CUSTOMER_LIFETIME_VALUE,
+
+    ROUND(
+        AVG(r.TOTAL_ORDER_VALUE),
+        2
+    ) AS AVERAGE_ORDER_VALUE
+
+FROM OLIST_DW.MART.CLEAN_CUSTOMERS c
+
+JOIN OLIST_DW.MART.CLEAN_ORDERS o
+    ON c.CUSTOMER_ID = o.CUSTOMER_ID
+
+JOIN OLIST_DW.MART.ORDER_REVENUE r
+    ON o.ORDER_ID = r.ORDER_ID
+
+GROUP BY c.CUSTOMER_UNIQUE_ID;
+
+
+-- =========================================================
+-- ORDER REVENUE
+-- =========================================================
+
+CREATE OR REPLACE TABLE OLIST_DW.MART.ORDER_REVENUE AS
+SELECT
+    ORDER_ID,
+
+    SUM(PRICE) AS TOTAL_PRODUCT_VALUE,
+
+    SUM(FREIGHT_VALUE) AS TOTAL_FREIGHT,
+
+    SUM(PRICE + FREIGHT_VALUE) AS TOTAL_ORDER_VALUE,
+
+    COUNT(*) AS TOTAL_ITEMS
+
+FROM OLIST_DW.MART.CLEAN_ORDER_ITEMS
+
+GROUP BY ORDER_ID;
+
+SELECT *
+FROM OLIST_DW.MART.FE_ORDERS
+LIMIT 10;
+
+SELECT *
+FROM OLIST_DW.MART.CUSTOMER_METRICS
+ORDER BY CUSTOMER_LIFETIME_VALUE DESC
+LIMIT 10;

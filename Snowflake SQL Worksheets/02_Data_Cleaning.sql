@@ -1,0 +1,158 @@
+-- =========================================================
+-- CREATE MART SCHEMA
+-- =========================================================
+
+CREATE SCHEMA IF NOT EXISTS OLIST_DW.MART;
+
+-- =========================================================
+-- CLEAN ORDERS
+-- =========================================================
+
+CREATE OR REPLACE TABLE OLIST_DW.MART.CLEAN_ORDERS AS
+SELECT
+    ORDER_ID,
+    CUSTOMER_ID,
+    ORDER_STATUS,
+
+    TRY_TO_TIMESTAMP_NTZ(NULLIF(ORDER_PURCHASE_TIMESTAMP,'')) 
+        AS ORDER_PURCHASE_TIMESTAMP,
+
+    TRY_TO_TIMESTAMP_NTZ(NULLIF(ORDER_APPROVED_AT,'')) 
+        AS ORDER_APPROVED_AT,
+
+    TRY_TO_TIMESTAMP_NTZ(NULLIF(ORDER_DELIVERED_CUSTOMER_DATE,'')) 
+        AS ORDER_DELIVERED_CUSTOMER_DATE,
+
+    TRY_TO_TIMESTAMP_NTZ(NULLIF(ORDER_ESTIMATED_DELIVERY_DATE,'')) 
+        AS ORDER_ESTIMATED_DELIVERY_DATE
+
+FROM OLIST_DW.STAGING.ORDERS
+WHERE ORDER_ID IS NOT NULL;
+
+SELECT COUNT(*) 
+FROM OLIST_DW.MART.CLEAN_ORDERS;
+
+-- =========================================================
+-- CLEAN CUSTOMERS
+-- =========================================================
+
+CREATE OR REPLACE TABLE OLIST_DW.MART.CLEAN_CUSTOMERS AS
+SELECT
+    CUSTOMER_ID,
+    CUSTOMER_UNIQUE_ID,
+    CUSTOMER_ZIP_CODE_PREFIX,
+    INITCAP(CUSTOMER_CITY) AS CUSTOMER_CITY,
+    CUSTOMER_STATE
+FROM OLIST_DW.STAGING.CUSTOMER;
+
+-- =========================================================
+-- CLEAN PRODUCTS
+-- =========================================================
+
+CREATE OR REPLACE TABLE OLIST_DW.MART.CLEAN_PRODUCTS AS
+SELECT
+    PRODUCT_ID,
+
+    COALESCE(
+        NULLIF(PRODUCT_CATEGORY_NAME,''),
+        'Unknown'
+    ) AS PRODUCT_CATEGORY_NAME,
+
+    PRODUCT_NAME_LENGHT,
+    PRODUCT_DESCRIPTION_LENGHT,
+    PRODUCT_PHOTOS_QTY,
+    PRODUCT_WEIGHT_G,
+    PRODUCT_LENGTH_CM,
+    PRODUCT_HEIGHT_CM,
+    PRODUCT_WIDTH_CM
+
+FROM OLIST_DW.STAGING.PRODUCTS;
+
+-- =========================================================
+-- CLEAN PAYMENTS
+-- =========================================================
+
+CREATE OR REPLACE TABLE OLIST_DW.MART.CLEAN_PAYMENTS AS
+SELECT
+    ORDER_ID,
+
+    CASE
+        WHEN PAYMENT_TYPE = 'not_defined'
+        THEN 'Unknown'
+        ELSE PAYMENT_TYPE
+    END AS PAYMENT_TYPE,
+
+    PAYMENT_SEQUENTIAL,
+
+    CASE
+        WHEN PAYMENT_INSTALLMENTS < 1
+        THEN NULL
+        ELSE PAYMENT_INSTALLMENTS
+    END AS PAYMENT_INSTALLMENTS,
+
+    PAYMENT_VALUE
+
+FROM OLIST_DW.STAGING.PAYMENTS;
+
+-- =========================================================
+-- CLEAN REVIEWS
+-- =========================================================
+
+CREATE OR REPLACE TABLE OLIST_DW.MART.CLEAN_REVIEWS AS
+SELECT
+    REVIEW_ID,
+    ORDER_ID,
+    REVIEW_SCORE,
+
+    TRY_TO_TIMESTAMP_NTZ(NULLIF(REVIEW_CREATION_DATE,'')) 
+        AS REVIEW_CREATION_DATE,
+
+    TRY_TO_TIMESTAMP_NTZ(NULLIF(REVIEW_ANSWER_TIMESTAMP,'')) 
+        AS REVIEW_ANSWER_TIMESTAMP
+
+FROM OLIST_DW.STAGING.REVIEWS;
+
+-- =========================================================
+-- CLEAN SELLERS
+-- =========================================================
+
+CREATE OR REPLACE TABLE OLIST_DW.MART.CLEAN_SELLERS AS
+SELECT
+    SELLER_ID,
+    SELLER_ZIP_CODE,
+    INITCAP(SELLER_CITY) AS SELLER_CITY,
+    SELLER_STATE
+FROM OLIST_DW.STAGING.SELLERS;
+
+
+-- =========================================================
+-- CLEAN ORDER ITEMS
+-- =========================================================
+
+CREATE OR REPLACE TABLE OLIST_DW.MART.CLEAN_ORDER_ITEMS AS
+SELECT
+    ORDER_ID,
+    ORDER_ITEM_ID,
+    PRODUCT_ID,
+    SELLER_ID,
+
+    TRY_TO_TIMESTAMP_NTZ(NULLIF(SHIPPING_LIMIT_DATE,'')) 
+        AS SHIPPING_LIMIT_DATE,
+
+    PRICE,
+    FREIGHT_VALUE
+
+FROM OLIST_DW.STAGING.ORDER_ITEMS;
+
+
+-- =========================================================
+-- CLEAN PRODUCT CATEGORY TRANSLATION
+-- =========================================================
+
+CREATE OR REPLACE TABLE OLIST_DW.MART.CLEAN_PRODUCT_CATEGORY_TRANSLATION AS
+SELECT
+    CATEGORY_NAME,
+    CATEGORY_NAME_ENGLISH
+FROM OLIST_DW.STAGING.PRODUCT_CATEGORY_TRANSLATION;
+
+SHOW TABLES IN SCHEMA OLIST_DW.MART;
