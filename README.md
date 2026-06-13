@@ -96,7 +96,9 @@ The goal of this project is to answer critical business questions such as:
 
 | Category             | Technology    |
 | -------------------- | ------------- |
-| Cloud Storage        | AWS S3        |
+| Cloud Storage        | AWS S3   
+| Data Validation      | AWS Athena    |
+| Data Automation      | AWS Glue
 | Data Warehouse       | Snowflake     |
 | Programming Language | Python        |
 | Query Language       | SQL           |
@@ -405,6 +407,7 @@ Analyze customer behavior, loyalty, and geographical trends.
 # ☁️ AWS S3 Integration
 
 Amazon S3 was used as the cloud storage layer for raw datasets.
+Applied a 9-category data quality framework across all 10 staging tables in Amazon Athena (90 total checks), validating schema integrity, completeness, content validity, and ETL load accuracy before data was promoted to Snowflake.
 
 ### AWS Screenshots
 <img width="2560" height="1600" alt="image" src="https://github.com/user-attachments/assets/8fa61ae1-9cea-496c-8dd6-78dfa0e15c9a" />
