@@ -3,7 +3,7 @@
 -- =========================================================
 
 -- 1. Total Rows
-SELECT COUNT(*) AS total_rows
+SELECT COUNT(*) AS total_rows 
 FROM OLIST_DW.STAGING.ORDERS;
 
 -- Results = 99441 Rows
